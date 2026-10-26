@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Study Slot - Study Slot Booking System</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: none;
+        }
+
+        .btn-book {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .room-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .room-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .amenity-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-door-open me-2"></i>
+                Study Slot Booking System
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="book-room.html">
+                            <i class="fas fa-plus me-1"></i>Book Study Slot
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-bookings.html">
+                            <i class="fas fa-calendar me-1"></i>My Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="qr-scanner.html">
+                            <i class="fas fa-qrcode me-1"></i>QR Scanner
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-plus text-primary me-2"></i>Book a Study Slot
+            </h1>
+            <p class="text-muted mb-0">Select date, time, and room preferences for your study session</p>
+        </div>
+
+        <div id="message-container"></div>
+
+        <div class="row">
+            <!-- Booking Form -->
+            <div class="col-lg-8 mb-4">
+                <div class="booking-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-calendar-plus text-primary me-2"></i>Booking Details
+                        </h5>
+
+                        <form id="booking-form">
+                            <input type="hidden" name="action" value="book">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="booking_date" class="form-label">
+                                        <i class="fas fa-calendar me-1"></i>Date
+                                    </label>
+                                    <input type="date" class="form-control" id="booking_date" name="booking_date" required>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="room_id" class="form-label">
+                                        <i class="fas fa-door-open me-1"></i>Select Room
+                                    </label>
+                                    <select class="form-select" id="room_id" name="room_id" required>
+                                        <option value="">Choose a room</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="attendees" class="form-label">
+                                        <i class="fas fa-users me-1"></i>Number of Attendees
+                                    </label>
+                                    <select class="form-select" id="attendees" name="attendees" required>
+                                        <option value="">Select attendees</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="start_time" class="form-label">
+                                        <i class="fas fa-clock me-1"></i>Start Time
+                                    </label>
+                                    <select class="form-select" id="start_time" name="start_time" required>
+                                        <option value="">Select start time</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="end_time" class="form-label">
+                                        <i class="fas fa-clock me-1"></i>End Time
+                                    </label>
+                                    <select class="form-select" id="end_time" name="end_time" required>
+                                        <option value="">Select end time</option>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="purpose" class="form-label">
+                                    <i class="fas fa-comment me-1"></i>Meeting Purpose (Optional)
+                                </label>
+                                <textarea class="form-control" id="purpose" name="purpose" rows="3"
+                                    placeholder="Brief description of the meeting purpose..."></textarea>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-book btn-lg">
+                                    <i class="fas fa-check me-2"></i>Book Study Slot
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Rooms -->
+            <div class="col-lg-4 mb-4">
+                <div class="booking-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-door-open text-primary me-2"></i>Available Rooms
+                        </h5>
+
+                        <div id="rooms-container">
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
+                                <p>Loading rooms...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('api/auth.php?action=logout')
+                    .then(res => res.json())
+                    .then(data => { window.location.href = 'auth.html'; });
+            });
+
+            // Init form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking_date').setAttribute('min', today);
+
+            const attSelect = document.getElementById('attendees');
+            for(let i=1; i<=25; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = i + (i > 1 ? ' persons' : ' person');
+                attSelect.appendChild(opt);
+            }
+
+            const startSelect = document.getElementById('start_time');
+            const endSelect = document.getElementById('end_time');
+            
+            for(let h=8; h<=23; h++) {
+                ['00', '30'].forEach(m => {
+                    if (h === 23 && m === '30') return; // Limit to 23:00
+                    const t = `${h.toString().padStart(2, '0')}:${m}`;
+                    if (h <= 22) {
+                        const sOpt = document.createElement('option');
+                        sOpt.value = t;
+                        sOpt.textContent = t;
+                        startSelect.appendChild(sOpt);
+                    }
+                    const eOpt = document.createElement('option');
+                    eOpt.value = t;
+                    eOpt.textContent = t;
+                    endSelect.appendChild(eOpt);
+                });
+            }
+
+            // Fetch rooms
+            fetch('api/rooms.php?action=list')
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        const container = document.getElementById('rooms-container');
+                        if (data.data.rooms && data.data.rooms.length > 0) {
+                            let html = '';
+                            let selectHtml = '<option value="">Choose a room</option>';
+                            data.data.rooms.forEach(room => {
+                                let amenitiesHtml = '';
+                                if (room.amenities) {
+                                    try {
+                                        const ams = JSON.parse(room.amenities);
+                                        ams.forEach(am => {
+                                            let icon = 'check';
+                                            if (am.includes('wifi')) icon = 'wifi';
+                                            if (am.includes('projector') || am.includes('tv')) icon = 'desktop';
+                                            if (am.includes('board')) icon = 'chalkboard';
+                                            amenitiesHtml += `<span class="amenity-badge"><i class="fas fa-${icon} me-1"></i>${capitalize(am)}</span>`;
+                                        });
+                                    } catch(e){}
+                                }
+                                html += `
+                                    <div class="room-card mb-3 p-3">
+                                        <h6 class="mb-2">${escapeHtml(room.room_name)}</h6>
+                                        <p class="small text-muted mb-2">
+                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                            ${escapeHtml(room.location)}
+                                        </p>
+                                        <p class="small text-muted mb-2">
+                                            <i class="fas fa-users me-1"></i>
+                                            Capacity: ${room.capacity} people
+                                        </p>
+                                        ${amenitiesHtml ? `<div class="amenities">${amenitiesHtml}</div>` : ''}
+                                    </div>
+                                `;
+                                selectHtml += `<option value="${room.room_id}">${escapeHtml(room.room_name)} (Capacity: ${room.capacity})</option>`;
+                            });
+                            container.innerHTML = html;
+                            document.getElementById('room_id').innerHTML = selectHtml;
+                        } else {
+                            container.innerHTML = '<p class="text-muted">No rooms available.</p>';
+                            document.getElementById('room_id').innerHTML = '<option value="">No rooms available</option>';
+                        }
+                    }
+                });
+
+            // Handle booking submission
+            const form = document.getElementById('booking-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                fetch('api/rooms.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const msgDiv = document.getElementById('message-container');
+                    if (data.status === 'success') {
+                        msgDiv.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>`;
+                        form.reset();
+                    } else {
+                        let errorsHtml = data.errors.map(err => `<li>${err}</li>`).join('');
+                        msgDiv.innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">${errorsHtml}</ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>`;
+                    }
+                    window.scrollTo(0,0);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+            });
+        });
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '').toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up - Study Slot Booking System</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-body {
+            padding: 2rem;
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            padding: 12px 30px;
+            margin: 0 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-auth {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <h2 class="mb-0">Study Slot Booking System</h2>
+                <p class="mb-0 mt-2">Secure • Efficient • Easy to Use</p>
+            </div>
+
+            <div class="auth-body">
+                <div id="message-container"></div>
+
+                <!-- Navigation tabs -->
+                <ul class="nav nav-pills nav-justified mb-4" id="authTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="signin-tab" data-bs-toggle="pill" data-bs-target="#signin"
+                            type="button" role="tab">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="signup-tab" data-bs-toggle="pill" data-bs-target="#signup"
+                            type="button" role="tab">
+                            <i class="fas fa-user-plus me-2"></i>Sign Up
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="authTabsContent">
+                    <!-- Sign In Form -->
+                    <div class="tab-pane fade show active" id="signin" role="tabpanel">
+                        <form id="signin-form">
+                            <input type="hidden" name="action" value="login">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control" name="username"
+                                        placeholder="Username or Email" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" name="password" placeholder="Password"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-auth btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Sign Up Form -->
+                    <div class="tab-pane fade" id="signup" role="tabpanel">
+                        <form id="signup-form">
+                            <input type="hidden" name="action" value="register">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input type="text" class="form-control" name="username" placeholder="Username"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                        <input type="email" class="form-control" name="email" placeholder="Email"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-id-card"></i>
+                                    </span>
+                                    <input type="text" class="form-control" name="full_name" placeholder="Full Name"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-phone"></i>
+                                        </span>
+                                        <input type="tel" class="form-control" name="phone"
+                                            placeholder="Phone (Optional)">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-building"></i>
+                                        </span>
+                                        <input type="text" class="form-control" name="department"
+                                            placeholder="Department (Optional)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" class="form-control" name="password"
+                                            placeholder="Password" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" class="form-control" name="confirm_password"
+                                            placeholder="Confirm Password" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-auth btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <small class="text-muted">
+                        Already have an account? Use the Sign In tab above.<br>
+                        Need help? Contact your system administrator.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // Check if already logged in
+            fetch('api/auth.php?action=check')
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        window.location.href = 'dashboard.html';
+                    }
+                });
+
+            const showMessage = (type, content) => {
+                const msgDiv = document.getElementById('message-container');
+                let html = `<div class="alert alert-${type}">`;
+                if(Array.isArray(content)) {
+                    html += '<ul class="mb-0">';
+                    content.forEach(err => { html += `<li>${err}</li>`; });
+                    html += '</ul>';
+                } else {
+                    html += content;
+                }
+                html += '</div>';
+                msgDiv.innerHTML = html;
+            };
+
+            const signinForm = document.getElementById('signin-form');
+            signinForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(signinForm);
+                fetch('api/auth.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        showMessage('danger', data.errors);
+                    }
+                })
+                .catch(err => {
+                    showMessage('danger', ['An error occurred during login.']);
+                });
+            });
+
+            const signupForm = document.getElementById('signup-form');
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const pwd = signupForm.querySelector('input[name="password"]').value;
+                const pwdConfirm = signupForm.querySelector('input[name="confirm_password"]').value;
+                if(pwd !== pwdConfirm) {
+                    showMessage('danger', ['Passwords do not match.']);
+                    return;
+                }
+
+                const formData = new FormData(signupForm);
+                fetch('api/auth.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showMessage('success', data.message);
+                        signupForm.reset();
+                        document.getElementById('signin-tab').click();
+                    } else {
+                        showMessage('danger', data.errors);
+                    }
+                })
+                .catch(err => {
+                    showMessage('danger', ['An error occurred during registration.']);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

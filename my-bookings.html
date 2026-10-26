@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Study Slot Booking System</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .booking-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 1rem 1.5rem;
+        }
+
+        .booking-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .amenity-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-view-qr {
+            background: #28a745;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-door-open me-2"></i>
+                Study Slot Booking System
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-room.html">
+                            <i class="fas fa-plus me-1"></i>Book Room
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="my-bookings.html">
+                            <i class="fas fa-calendar me-1"></i>My Bookings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="qr-scanner.html">
+                            <i class="fas fa-qrcode me-1"></i>QR Scanner
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-calendar text-primary me-2"></i>My Bookings
+                    </h1>
+                    <p class="text-muted mb-0">Manage your room reservations and view booking history</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="book-room.html" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>New Booking
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="message-container"></div>
+
+        <div class="row">
+            <!-- Statistics -->
+            <div class="col-md-4 mb-4">
+                <div class="stats-card mb-3">
+                    <div class="stats-number" id="stat-total">...</div>
+                    <div>Total Bookings</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stats-card mb-3">
+                    <div class="stats-number" id="stat-confirmed">...</div>
+                    <div>Confirmed</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stats-card mb-3">
+                    <div class="stats-number" id="stat-upcoming">...</div>
+                    <div>Upcoming</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-card mb-4">
+            <div class="card-body">
+                <form id="filter-form" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="all">All Status</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date Range</label>
+                        <select class="form-select" id="date" name="date">
+                            <option value="all">All Dates</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="today">Today</option>
+                            <option value="past">Past</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="button" id="clear-filters-btn" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo me-2"></i>Clear Filters
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Bookings List -->
+        <div id="bookings-container">
+            <div class="text-center py-5">
+                <i class="fas fa-spinner fa-spin fa-4x text-muted mb-3"></i>
+                <h4>Loading bookings...</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('api/auth.php?action=logout')
+                    .then(res => res.json())
+                    .then(data => { window.location.href = 'auth.html'; });
+            });
+
+            const filterForm = document.getElementById('filter-form');
+            const statusSelect = document.getElementById('status');
+            const dateSelect = document.getElementById('date');
+
+            function fetchBookings() {
+                const params = new URLSearchParams(new FormData(filterForm));
+                fetch(`api/bookings.php?${params.toString()}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const d = data.data;
+                            document.getElementById('stat-total').textContent = d.stats.total;
+                            document.getElementById('stat-confirmed').textContent = d.stats.confirmed;
+                            document.getElementById('stat-upcoming').textContent = d.stats.upcoming;
+
+                            renderBookings(d.bookings);
+                        } else {
+                            window.location.href = 'auth.html';
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+
+            filterForm.addEventListener('change', fetchBookings);
+
+            document.getElementById('clear-filters-btn').addEventListener('click', function() {
+                statusSelect.value = 'all';
+                dateSelect.value = 'all';
+                fetchBookings();
+            });
+
+            // Initial fetch
+            fetchBookings();
+
+            function renderBookings(bookings) {
+                const container = document.getElementById('bookings-container');
+                if (!bookings || bookings.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h4>No bookings found</h4>
+                            <p class="text-muted mb-3">You haven't made any bookings yet or no bookings match your filters.</p>
+                            <a href="book-room.html" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Make Your First Booking
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                const todayStr = new Date().toISOString().split('T')[0];
+
+                bookings.forEach(b => {
+                    let amenitiesHtml = '';
+                    if (b.amenities) {
+                        try {
+                            const ams = JSON.parse(b.amenities);
+                            ams.forEach(am => {
+                                amenitiesHtml += `<span class="amenity-badge">${escapeHtml(am.replace('_', ' '))}</span>`;
+                            });
+                        } catch(e){}
+                    }
+
+                    const canCancel = b.status === 'confirmed' && b.booking_date >= todayStr;
+
+                    html += `
+                        <div class="booking-card">
+                            <div class="booking-header">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h5 class="mb-0">${escapeHtml(b.room_name)}</h5>
+                                        <small class="opacity-75">
+                                            <i class="fas fa-hashtag me-1"></i>
+                                            ${escapeHtml(b.booking_reference)}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <span class="booking-status status-${b.status}">
+                                            ${capitalize(b.status)}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-2">
+                                            <i class="fas fa-calendar text-primary me-2"></i>
+                                            <strong>Date:</strong>
+                                            ${formatDate(b.booking_date)}
+                                        </div>
+                                        <div class="mb-2">
+                                            <i class="fas fa-clock text-primary me-2"></i>
+                                            <strong>Time:</strong>
+                                            ${formatTime(b.start_time)} - ${formatTime(b.end_time)}
+                                        </div>
+                                        <div class="mb-2">
+                                            <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                            <strong>Location:</strong>
+                                            ${escapeHtml(b.location)}
+                                        </div>
+                                        <div class="mb-2">
+                                            <i class="fas fa-users text-primary me-2"></i>
+                                            <strong>Attendees:</strong>
+                                            ${b.attendees} people
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        ${b.purpose ? `
+                                        <div class="mb-2">
+                                            <i class="fas fa-comment text-primary me-2"></i>
+                                            <strong>Purpose:</strong><br>
+                                            <small class="text-muted">${escapeHtml(b.purpose)}</small>
+                                        </div>
+                                        ` : ''}
+
+                                        ${amenitiesHtml ? `
+                                        <div class="mb-2">
+                                            <i class="fas fa-star text-primary me-2"></i>
+                                            <strong>Amenities:</strong><br>
+                                            ${amenitiesHtml}
+                                        </div>
+                                        ` : ''}
+
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-plus me-1"></i>
+                                                Booked on ${formatDate(b.created_at)}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border-top pt-3 mt-3">
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        ${b.status === 'confirmed' ? `
+                                            <a href="generate-qr.php?ref=${b.booking_reference}"
+                                                class="btn btn-view-qr btn-sm" target="_blank">
+                                                <i class="fas fa-qrcode me-1"></i>View QR Code
+                                            </a>
+                                        ` : ''}
+
+                                        ${canCancel ? `
+                                            <button type="button" class="btn btn-cancel btn-sm cancel-btn" data-id="${b.booking_id}">
+                                                <i class="fas fa-times me-1"></i>Cancel
+                                            </button>
+                                        ` : ''}
+
+                                        <small class="text-muted ms-auto align-self-center">
+                                            Capacity: ${b.capacity} people
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+                document.querySelectorAll('.cancel-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Are you sure you want to cancel this booking?')) {
+                            const id = this.getAttribute('data-id');
+                            fetch('api/bookings.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'cancel', booking_id: id })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                const msgDiv = document.getElementById('message-container');
+                                if (data.status === 'success') {
+                                    msgDiv.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        ${data.message}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>`;
+                                    fetchBookings();
+                                } else {
+                                    msgDiv.innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        ${data.message}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>`;
+                                }
+                                window.scrollTo(0,0);
+                            });
+                        }
+                    });
+                });
+            }
+        });
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '').toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const [h, m] = timeStr.split(':');
+            let hour = parseInt(h, 10);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            return `${hour}:${m} ${ampm}`;
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+
+</html>

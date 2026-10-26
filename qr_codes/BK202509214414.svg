@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            
+            <!-- Background -->
+            <rect width="300" height="300" fill="url(#grad1)" rx="20"/>
+            
+            <!-- Inner card -->
+            <rect x="20" y="20" width="260" height="260" fill="white" rx="15"/>
+            
+            <!-- Header -->
+            <rect x="20" y="20" width="260" height="60" fill="url(#grad1)" rx="15"/>
+            <rect x="20" y="65" width="260" height="15" fill="white"/>
+            
+            <!-- QR Icon -->
+            <rect x="40" y="35" width="30" height="30" fill="white" rx="3"/>
+            <rect x="45" y="40" width="5" height="5" fill="#667eea"/>
+            <rect x="55" y="40" width="5" height="5" fill="#667eea"/>
+            <rect x="65" y="40" width="5" height="5" fill="#667eea"/>
+            <rect x="45" y="50" width="5" height="5" fill="#667eea"/>
+            <rect x="65" y="50" width="5" height="5" fill="#667eea"/>
+            <rect x="45" y="60" width="5" height="5" fill="#667eea"/>
+            <rect x="55" y="60" width="5" height="5" fill="#667eea"/>
+            <rect x="65" y="60" width="5" height="5" fill="#667eea"/>
+            
+            <!-- Text -->
+            <text x="80" y="50" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">BOOKING QR</text>
+            
+            <!-- Booking Details -->
+            <text x="40" y="120" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Reference:</text>
+            <text x="40" y="140" font-family="Arial, sans-serif" font-size="12" fill="#666">BK202509214414</text>
+            
+            <text x="40" y="170" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Room:</text>
+            <text x="40" y="190" font-family="Arial, sans-serif" font-size="12" fill="#666">Silent Study Zone</text>
+            
+            <text x="40" y="220" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Date & Time:</text>
+            <text x="40" y="240" font-family="Arial, sans-serif" font-size="12" fill="#666">Sep 21, 2025</text>
+            <text x="40" y="255" font-family="Arial, sans-serif" font-size="12" fill="#666">9:30 AM - 11:00 AM</text>
+        </svg>

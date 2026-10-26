@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Ticket - BK202510087275</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ticket {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+        }
+        
+        .ticket-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .ticket-header h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .ticket-body {
+            padding: 20px;
+        }
+        
+        .ticket-info {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .ticket-info:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #22c55e;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .time-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            color: #4b5563;
+            font-size: 14px;
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .qr-code {
+            margin: 15px auto;
+            max-width: 200px;
+            height: auto;
+        }
+        
+        .booking-ref {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            color: #374151;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <div class="ticket-header">
+            <h1>Study Room Booking</h1>
+        </div>
+        <div class="ticket-body">
+            <div class="ticket-info">
+                <div class="info-label">Booking Reference</div>
+                <div class="info-value booking-ref">BK202510087275</div>
+            </div>
+            
+            <div class="ticket-info">
+                <div class="info-label">Room</div>
+                <div class="info-value">Main Library Study Room A</div>
+            </div>
+            
+            <div class="ticket-info">
+                <div class="info-label">Date</div>
+                <div class="info-value">2025-10-09</div>
+            </div>
+            
+            <div class="ticket-info">
+                <div class="info-label">Time</div>
+                <div class="info-value">
+                    <span class="time-badge">13:00</span> - 
+                    <span class="time-badge">21:00</span>
+                </div>
+            </div>
+            
+            <div class="ticket-info">
+                <div class="info-label">Booked By</div>
+                <div class="info-value">demo</div>
+            </div>
+            
+            <div class="ticket-info">
+                <div class="info-label">Status</div>
+                <div class="info-value">
+                    <span class="status-badge">✓ Valid</span>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-code">
+                    <!-- QR Code SVG will be inserted here -->
+                    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="200" fill="white"/><rect x="0" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="9.5238095238095" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="47.619047619048" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="142.85714285714" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="152.38095238095" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="161.90476190476" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="171.42857142857" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="180.95238095238" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="0" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="9.5238095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="9.5238095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="9.5238095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="9.5238095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="152.38095238095" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="161.90476190476" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="171.42857142857" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="19.047619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="152.38095238095" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="161.90476190476" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="171.42857142857" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="28.571428571429" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="152.38095238095" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="161.90476190476" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="171.42857142857" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="38.095238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="47.619047619048" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="47.619047619048" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="47.619047619048" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="47.619047619048" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="9.5238095238095" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="47.619047619048" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="76.190476190476" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="95.238095238095" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="114.28571428571" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="133.33333333333" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="142.85714285714" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="152.38095238095" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="161.90476190476" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="171.42857142857" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="180.95238095238" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="190.47619047619" y="57.142857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="76.190476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="95.238095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="114.28571428571" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="9.5238095238095" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="47.619047619048" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="133.33333333333" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="142.85714285714" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="142.85714285714" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="152.38095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="152.38095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="152.38095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="152.38095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="152.38095238095" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="161.90476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="161.90476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="161.90476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="161.90476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="161.90476190476" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="171.42857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="171.42857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="171.42857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="171.42857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="171.42857142857" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="180.95238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="180.95238095238" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="0" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="9.5238095238095" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="19.047619047619" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="28.571428571429" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="38.095238095238" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="47.619047619048" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/><rect x="57.142857142857" y="190.47619047619" width="9.5238095238095" height="9.5238095238095" fill="black"/></svg>
+                </div>
+                <p style="color: #666; font-size: 14px;">Scan to verify booking</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

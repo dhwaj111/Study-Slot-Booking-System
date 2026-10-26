@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Verification - Study Slot Booking System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+<style>
+body { background: #f8f9fa; }
+.verification-container { max-width: 700px; margin: 2rem auto; padding: 20px; }
+.verification-card { border-radius: 15px; background: #fff; padding: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.status-icon { font-size: 4rem; color: #28a745; margin-bottom: 15px; }
+.table { background: white; border-radius: 10px; overflow: hidden; }
+th { background-color: #e9f7ef; }
+@media (max-width: 576px) {
+    .verification-container { padding: 10px; }
+    .table td, .table th { font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+<div class="container verification-container">
+
+    <div id="loading" class="text-center py-5">
+        <i class="fas fa-spinner fa-spin fa-3x text-muted mb-3"></i>
+        <h4>Verifying Booking...</h4>
+    </div>
+
+    <div id="error-card" class="verification-card border-danger" style="display: none;">
+        <div class="status-icon text-danger">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        <h3 class="text-danger">Verification Failed</h3>
+        <p class="text-muted" id="error-message"></p>
+        <a href="auth.html" class="btn btn-primary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+    </div>
+
+    <div id="success-card" class="verification-card" style="display: none;">
+        <div class="status-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h3 class="text-success mb-3">Booking Verified</h3>
+        <p class="text-muted mb-4">This is a valid booking!</p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle text-start">
+                <tbody id="booking-table-body">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-info mt-4">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Verification Time:</strong> <span id="verification-time"></span>
+        </div>
+
+        <div id="status-alert"></div>
+
+        <a href="auth.html" class="btn btn-outline-primary mt-3"><i class="fas fa-arrow-left me-2"></i>Return to Login</a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get('ref');
+
+        if (!ref) {
+            showError("No booking reference provided.");
+            return;
+        }
+
+        document.title = "Booking Verification - " + ref;
+
+        fetch('api/verify-qr.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'lookup_booking', booking_reference: ref })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('loading').style.display = 'none';
+
+            if (data.status === 'success') {
+                showSuccess(data.data);
+            } else {
+                showError(data.message || "Booking reference not found.");
+            }
+        })
+        .catch(err => {
+            document.getElementById('loading').style.display = 'none';
+            showError("Error retrieving booking information.");
+        });
+    });
+
+    function showError(msg) {
+        document.getElementById('error-message').textContent = msg;
+        document.getElementById('error-card').style.display = 'block';
+    }
+
+    function showSuccess(b) {
+        let html = `
+            <tr>
+                <th><i class="fas fa-hashtag text-success me-2"></i>Reference</th>
+                <td><span class="badge bg-success fs-6">${escapeHtml(b.booking_reference)}</span></td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-user text-success me-2"></i>Booked By</th>
+                <td>${escapeHtml(b.full_name)}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-door-open text-success me-2"></i>Room</th>
+                <td>${escapeHtml(b.room_name)}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-map-marker-alt text-success me-2"></i>Location</th>
+                <td>${escapeHtml(b.location)}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-calendar text-success me-2"></i>Date</th>
+                <td>${formatDate(b.booking_date)}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-clock text-success me-2"></i>Time</th>
+                <td>${formatTime(b.start_time)} - ${formatTime(b.end_time)}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-users text-success me-2"></i>Attendees</th>
+                <td>${b.attendees} people</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-info-circle text-success me-2"></i>Status</th>
+                <td>
+                    <span class="badge bg-${b.status === 'confirmed' ? 'success' : (b.status === 'cancelled' ? 'danger' : 'warning')}">
+                        ${capitalize(b.status)}
+                    </span>
+                </td>
+            </tr>
+        `;
+
+        if (b.purpose) {
+            html += `
+            <tr>
+                <th><i class="fas fa-comment text-success me-2"></i>Purpose</th>
+                <td><em>${escapeHtml(b.purpose)}</em></td>
+            </tr>
+            `;
+        }
+
+        document.getElementById('booking-table-body').innerHTML = html;
+
+        const now = new Date();
+        document.getElementById('verification-time').textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ' at ' + formatTime(now.toTimeString().substring(0, 8));
+
+        const statusAlert = document.getElementById('status-alert');
+        if (b.status === 'confirmed') {
+            statusAlert.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>This booking is <strong>confirmed</strong>.
+                </div>
+            `;
+        } else if (b.status === 'cancelled') {
+            statusAlert.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-ban me-2"></i>This booking has been <strong>cancelled</strong>.
+                </div>
+            `;
+        }
+
+        document.getElementById('success-card').style.display = 'block';
+    }
+
+    function escapeHtml(unsafe) {
+        return (unsafe || '').toString()
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatTime(timeStr) {
+        if (!timeStr) return '';
+        const [h, m] = timeStr.split(':');
+        let hour = parseInt(h, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12;
+        hour = hour ? hour : 12;
+        return `${hour}:${m} ${ampm}`;
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+</script>
+</body>
+</html>

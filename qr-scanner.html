@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner - Study Slot Booking System</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .scanner-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: none;
+        }
+
+        .scanner-area {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .scanner-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+
+        .btn-scan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .booking-details {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .qr-camera {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            background: #000;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: #667eea;
+            animation: scan 2s linear infinite;
+            position: relative;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-150px); }
+            100% { transform: translateY(150px); }
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .ticket-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid #667eea;
+        }
+
+        .ticket-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 10px;
+        }
+
+        .ticket-table th {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #eee;
+        }
+
+        .ticket-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ticket-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #28a745;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .ticket-table h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-door-open me-2"></i>
+                Study Slot Booking System
+            </a>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-room.html">
+                            <i class="fas fa-plus me-1"></i>Book Room
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="qr-scanner.html">
+                            <i class="fas fa-qrcode me-1"></i>QR Scanner
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="h3 mb-0">
+                <i class="fas fa-qrcode text-primary me-2"></i>QR Code Scanner
+            </h1>
+            <p class="text-muted mb-0">Scan booking QR codes or enter booking reference manually</p>
+        </div>
+
+        <div id="message-container"></div>
+
+        <div class="row">
+            <!-- QR Scanner -->
+            <div class="col-lg-8 mb-4">
+                <div class="scanner-card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="fas fa-camera text-primary me-2"></i>QR Code Scanner
+                        </h5>
+
+                        <div class="scanner-area mb-4">
+                            <div class="qr-camera" id="qr-camera">
+                                <video id="camera-stream" autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                                <div class="scan-line"></div>
+                            </div>
+
+                            <div id="scanner-placeholder">
+                                <i class="fas fa-qrcode scanner-icon"></i>
+                                <h4>Scan QR Code</h4>
+                                <p class="text-muted mb-3">
+                                    Click the button below to start scanning QR codes with your camera
+                                </p>
+                                <button type="button" class="btn btn-scan" id="btn-start-camera">
+                                    <i class="fas fa-camera me-2"></i>Start Camera
+                                </button>
+                                <br><small class="text-muted mt-2 d-block">
+                                    Make sure to allow camera access when prompted
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Manual QR Data Input -->
+                        <div class="border-top pt-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-keyboard me-2"></i>Manual QR Data Input
+                            </h6>
+                            <form id="verify-qr-form">
+                                <input type="hidden" name="action" value="verify_qr">
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="qr_data" name="qr_data" rows="3"
+                                        placeholder="Paste QR code data here..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-scan">
+                                    <i class="fas fa-check me-2"></i>Verify QR Data
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Manual Booking Lookup -->
+                        <div class="border-top pt-4 mt-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-search me-2"></i>Booking Reference Lookup
+                            </h6>
+                            <form id="lookup-form">
+                                <input type="hidden" name="action" value="lookup_booking">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="booking_reference"
+                                        placeholder="Enter booking reference (e.g., BK20250921001)">
+                                    <button type="submit" class="btn btn-scan">
+                                        <i class="fas fa-search me-2"></i>Look Up
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Test QR Codes -->
+                        <div class="border-top pt-4 mt-4">
+                            <h6 class="mb-3">
+                                <i class="fas fa-vial me-2"></i>Test QR Codes
+                            </h6>
+                            <p class="small text-muted mb-3">Click to fill QR data for testing:</p>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-test-qr" data-ref="BK202509210001">
+                                    📚 Main Library Study Room A
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-test-qr" data-ref="BK202509210005">
+                                    🤫 University Library Quiet Study Hall
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm btn-test-qr" data-ref="BK202509210006">
+                                    🏛️ Central Library Conference Room
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Details & Instructions -->
+            <div class="col-lg-4 mb-4">
+                <div id="booking-details-container"></div>
+
+                <!-- Scanner Instructions -->
+                <div class="scanner-card mt-4">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-info-circle text-primary me-2"></i>How to Use
+                        </h6>
+                        <ol class="small">
+                            <li><strong>Camera Scanning:</strong> Click "Start Camera" and point your device at a QR code</li>
+                            <li><strong>Manual Input:</strong> Copy and paste QR data into the text area</li>
+                            <li><strong>Reference Lookup:</strong> Enter booking reference directly</li>
+                        </ol>
+                        <div class="mt-3 p-3 bg-light rounded">
+                            <small class="text-muted">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                <strong>Tip:</strong> QR codes can be found on booking confirmations and emails.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- QR Code Scanner Library -->
+    <script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('api/auth.php?action=logout')
+                    .then(res => res.json())
+                    .then(data => { window.location.href = 'auth.html'; });
+            });
+
+            const msgContainer = document.getElementById('message-container');
+
+            function showMessage(type, msg) {
+                msgContainer.innerHTML = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${msg}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                window.scrollTo(0, 0);
+            }
+
+            function handleVerifyResponse(data) {
+                if (data.status === 'success') {
+                    showMessage('success', data.message);
+                    renderBookingDetails(data.data);
+                } else {
+                    showMessage('danger', data.message);
+                    document.getElementById('booking-details-container').innerHTML = '';
+                }
+            }
+
+            document.getElementById('verify-qr-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fd = new FormData(this);
+                fetch('api/verify-qr.php', { method: 'POST', body: fd })
+                    .then(res => res.json())
+                    .then(handleVerifyResponse)
+                    .catch(console.error);
+            });
+
+            document.getElementById('lookup-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const fd = new FormData(this);
+                fetch('api/verify-qr.php', { method: 'POST', body: fd })
+                    .then(res => res.json())
+                    .then(handleVerifyResponse)
+                    .catch(console.error);
+            });
+
+            function renderBookingDetails(b) {
+                const container = document.getElementById('booking-details-container');
+                container.innerHTML = `
+                    <div class="booking-details mb-4">
+                        <h6 class="mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Booking Details
+                        </h6>
+                        <div class="mb-2">
+                            <strong>Reference:</strong><br>
+                            <span class="h6">${escapeHtml(b.booking_reference)}</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Room:</strong><br>
+                            ${escapeHtml(b.room_name)}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Location:</strong><br>
+                            ${escapeHtml(b.location)}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Date:</strong><br>
+                            ${formatDate(b.booking_date)}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Time:</strong><br>
+                            ${formatTime(b.start_time)} - ${formatTime(b.end_time)}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Booked by:</strong><br>
+                            ${escapeHtml(b.full_name)}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Attendees:</strong><br>
+                            ${b.attendees} people
+                        </div>
+                        <div class="mb-0">
+                            <strong>Status:</strong><br>
+                            <span class="badge bg-light text-dark">
+                                ${capitalize(b.status)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.querySelectorAll('.btn-test-qr').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ref = this.getAttribute('data-ref');
+                    const testData = {
+                        type: 'booking_verification',
+                        booking_reference: ref,
+                        room_name: 'Test Room',
+                        booking_date: '2025-09-21',
+                        start_time: '09:00:00',
+                        end_time: '10:30:00',
+                        user: 'demo'
+                    };
+                    const ta = document.getElementById('qr_data');
+                    ta.value = JSON.stringify(testData, null, 2);
+                    ta.style.borderColor = '#007bff';
+                    ta.focus();
+                    setTimeout(() => ta.style.borderColor = '', 2000);
+                });
+            });
+
+            // Camera handling
+            let cameraStream = null;
+            let scanning = false;
+            let scanInterval = null;
+
+            document.getElementById('btn-start-camera').addEventListener('click', startCamera);
+
+            function startCamera() {
+                const video = document.getElementById('camera-stream');
+                const camera = document.getElementById('qr-camera');
+                const placeholder = document.getElementById('scanner-placeholder');
+
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }
+                    })
+                    .then(stream => {
+                        cameraStream = stream;
+                        video.srcObject = stream;
+                        camera.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        scanning = true;
+
+                        video.addEventListener('loadedmetadata', startQRDetection);
+
+                        placeholder.innerHTML = `
+                            <div class="text-center">
+                                <button type="button" class="btn btn-danger mb-3" id="btn-stop-camera">
+                                    <i class="fas fa-stop me-2"></i>Stop Camera
+                                </button>
+                                <br><small class="text-muted">Point your camera at a QR code to scan</small>
+                                <div class="mt-2">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                    <span class="text-muted">Scanning for QR codes...</span>
+                                </div>
+                            </div>
+                        `;
+                        placeholder.style.display = 'block';
+                        document.getElementById('btn-stop-camera').addEventListener('click', stopCamera);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Camera access denied or error occurred.");
+                    });
+                } else {
+                    alert('Camera not supported.');
+                }
+            }
+
+            function startQRDetection() {
+                const video = document.getElementById('camera-stream');
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                scanInterval = setInterval(() => {
+                    if (video.readyState === video.HAVE_ENOUGH_DATA && scanning) {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (qrCode) {
+                            processQRCode(qrCode.data);
+                        }
+                    }
+                }, 500);
+            }
+
+            function processQRCode(qrData) {
+                stopCamera();
+                document.getElementById('qr_data').value = qrData;
+                document.getElementById('verify-qr-form').dispatchEvent(new Event('submit'));
+            }
+
+            function stopCamera() {
+                if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+                if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+                
+                document.getElementById('qr-camera').style.display = 'none';
+                scanning = false;
+
+                const placeholder = document.getElementById('scanner-placeholder');
+                placeholder.innerHTML = `
+                    <i class="fas fa-qrcode scanner-icon"></i>
+                    <h4>Scan QR Code</h4>
+                    <p class="text-muted mb-3">Click the button below to start scanning QR codes with your camera</p>
+                    <button type="button" class="btn btn-scan" id="btn-start-camera">
+                        <i class="fas fa-camera me-2"></i>Start Camera
+                    </button>
+                    <br><small class="text-muted mt-2 d-block">Make sure to allow camera access when prompted</small>
+                `;
+                document.getElementById('btn-start-camera').addEventListener('click', startCamera);
+            }
+
+            window.addEventListener('beforeunload', stopCamera);
+        });
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '').toString()
+                 .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const [h, m] = timeStr.split(':');
+            let hour = parseInt(h, 10);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            return `${hour}:${m} ${ampm}`;
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+</html>

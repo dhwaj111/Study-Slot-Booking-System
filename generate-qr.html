@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking QR Code - Study Slot Booking System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .qr-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+        .qr-code-display {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+            padding: 15px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #qr-code canvas,
+        #qr-code img {
+            width: 100% !important;
+            height: auto !important;
+        }
+        @media print {
+            .no-print { display: none; }
+            .qr-container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="no-print mb-3">
+            <a href="my-bookings.html" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to My Bookings
+            </a>
+            <button onclick="window.print()" class="btn btn-primary float-end">
+                <i class="fas fa-print me-2"></i>Print QR Code
+            </button>
+        </div>
+
+        <div id="loading" class="text-center py-5">
+            <i class="fas fa-spinner fa-spin fa-3x text-muted mb-3"></i>
+            <h4>Loading QR Code...</h4>
+        </div>
+
+        <div id="error-container" style="display: none;" class="alert alert-danger mt-4"></div>
+
+        <div class="qr-container" id="qr-container" style="display: none;">
+            <h2 class="mb-4"><i class="fas fa-qrcode text-primary me-2"></i>Booking QR Code</h2>
+
+            <div class="row mb-4">
+                <div class="col-md-6 text-start">
+                    <h6>Booking Reference:</h6>
+                    <strong id="b-ref">...</strong>
+                </div>
+                <div class="col-md-6 text-start">
+                    <h6>Room:</h6>
+                    <strong id="b-room">...</strong>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6 text-start">
+                    <h6>Date:</h6>
+                    <strong id="b-date">...</strong>
+                </div>
+                <div class="col-md-6 text-start">
+                    <h6>Time:</h6>
+                    <strong id="b-time">...</strong>
+                </div>
+            </div>
+
+            <div class="qr-code-display mb-4">
+                <div id="qr-code"></div>
+            </div>
+
+            <p class="text-muted mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                Scan this QR code at the room entrance or show it to the librarian for verification
+            </p>
+
+            <div class="no-print mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">QR Code Data (for manual entry)</h6>
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control" rows="6" id="qr-data-text" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ref = urlParams.get('ref');
+
+            if (!ref) {
+                window.location.href = 'my-bookings.html';
+                return;
+            }
+
+            fetch('api/verify-qr.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'lookup_booking', booking_reference: ref })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.status === 'success') {
+                    const b = data.data;
+                    document.getElementById('b-ref').textContent = b.booking_reference;
+                    document.getElementById('b-room').textContent = b.room_name;
+                    
+                    const d = new Date(b.booking_date);
+                    document.getElementById('b-date').textContent = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    document.getElementById('b-time').textContent = `${formatTime(b.start_time)} - ${formatTime(b.end_time)}`;
+
+                    const qrData = JSON.stringify({
+                        type: 'booking_verification',
+                        booking_reference: b.booking_reference,
+                        room_name: b.room_name,
+                        booking_date: b.booking_date,
+                        start_time: b.start_time,
+                        end_time: b.end_time,
+                        user: b.full_name,
+                        verify_url: window.location.origin + '/Study-Slot-Booking-System-main/verify-booking.html?ref=' + b.booking_reference
+                    });
+
+                    document.getElementById('qr-data-text').value = qrData;
+
+                    new QRCode(document.getElementById('qr-code'), {
+                        text: qrData,
+                        width: 250,
+                        height: 250,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.L
+                    });
+
+                    document.getElementById('qr-container').style.display = 'block';
+                    document.title = 'Booking QR Code - ' + b.booking_reference;
+                } else {
+                    document.getElementById('error-container').textContent = data.message;
+                    document.getElementById('error-container').style.display = 'block';
+                }
+            })
+            .catch(err => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-container').textContent = 'An error occurred while fetching booking details.';
+                document.getElementById('error-container').style.display = 'block';
+            });
+        });
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const [h, m] = timeStr.split(':');
+            let hour = parseInt(h, 10);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            return `${hour}:${m} ${ampm}`;
+        }
+    </script>
+</body>
+</html>
